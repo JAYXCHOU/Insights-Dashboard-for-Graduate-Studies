@@ -1,0 +1,9 @@
+SELECT 
+    cur_id,
+    cur_rn,
+    study_type,
+    [plan],
+    mm,
+    max_term
+FROM
+bronze.curriculum_cyc

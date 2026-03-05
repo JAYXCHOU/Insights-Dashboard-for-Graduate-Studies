@@ -1,0 +1,70 @@
+If not EXISTS(
+    SELECT * from sys.tables 
+    WHERE name = 'student_data' and SCHEMA_id = SCHEMA_id('bronze')
+)
+
+BEGIN
+        CREATE TABLE bronze.student_data(
+            stu_id                         char(7),
+            stu_deg_lev                    varchar(6),
+            stu_adm_date                   char(10),
+            stu_adm_year                   char(4),
+            stu_adm_term                   char(1),
+            sta_pres_id                    char(1),
+            sta_pres_des                   varchar(50),
+            stu_comp_date                  char(10),
+            stu_comp_year                  char(4),
+            stu_comp_term                  char(1),
+            stu_sex                        char(1),
+            stu_gpa_old                    char(5),
+            deg_lev_id                     char(1),
+            deg_lev_nth                    char(100),
+            fac_id                         char(2),
+            fac_nth_f                      varchar(255),
+            Cur_Type                       char(1),
+            cur_id                         char(5),
+            cur_rn                         char(2),
+            Study_Type                     char(1),
+            cur_nth                        varchar(200),
+            stu_app_plan                   char(3),
+            stu_prg_plan                   char(3),
+            pattern_detail                 varchar(255),
+            Brn_ID                         char(4),
+            brn_deg_nth                    char(100),
+            Sub_Brn_ID                     char(2),
+            Sub_Brn_Nth                    char(100),
+            max_year                       int,
+            Bench_id                       tinyint,
+            [เกณฑ์]                          char(4),
+            occup_id                       char(2),
+            [อาชีพ(ตอนสมัคร)]                          varchar(100),
+            groupN_id                      char(2),
+            [กลุ่มการศึกษาแบ่งตามมหาวิทยาลัย (3 กลุ่ม)]                    varchar(150),
+            [ภาษาที่ใช้ทำวิทยานิพนธ์ (T/E)]                varchar(1),
+            uni_id                         char(4),
+            uni_nth                        char(150),
+            nat_id                         char(3),
+            nat_nth                        char(100),
+            province_id                    char(2),
+            province_name_th               varchar(70),
+            deform_id                      char(2),
+            DEFORM_NAME                    varchar(70),
+            Job_Status                     char(1),
+            Student_Type                   char(1),
+            student_des                    varchar(250),
+            Grad_mean_Sum                  real,
+            Credit_Calt_Sum                real,
+            Credit_Term_Sum                real,
+            Grad_mean_Year                 char(4),
+            Grad_mean_Term                 char(1),
+            Date_Mean                      char(20),
+            payment_calculation_type_id    varchar(3),
+            payment_calculation_type_name_th    varchar(255),
+            stu_birth                      char(10),
+            thesis_name_en                 nvarchar(4000),
+            thesis_name_th                 nvarchar(4000)
+        );
+        PRINT 'Created bronze student_data table';
+END        
+ELSE
+    PRINT 'bronze student_data table already exists';

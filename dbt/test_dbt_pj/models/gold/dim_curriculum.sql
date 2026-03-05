@@ -1,0 +1,42 @@
+-- SELECT
+--     cur_id,
+--     cur_rn,
+--     study_type,
+--     deg_lev_id,
+--     cur_name_th,
+--     cur_name_en,
+--     deg_level,
+--     fac_id,
+--     fac_name_th,
+--     fac_name_en,
+--     Brn_ID,
+--     Sub_Brn_ID,
+--     major_name_th,
+--     major_name_en,
+--     groupN_id,
+--     study_group_type,
+--     lang
+-- FROM {{ref('silver_curr_data')}}
+
+SELECT
+    ROW_NUMBER() OVER (ORDER BY cur_id, cur_rn, study_plan) AS curriculum_key,
+    CONCAT(cur_id, '_', cur_rn, '-', study_plan, '-', Brn_ID) AS curriculum_id,
+    cur_id,
+    cur_rn,
+    study_plan,
+    study_type,
+    cur_name_th,
+    cur_name_en,
+    deg_lev_id,
+    deg_level,
+    fac_id,
+    fac_name_th,
+    fac_name_en,
+    Brn_ID,
+    Sub_Brn_ID,
+    major_name_th,
+    major_name_en,
+    groupN_id,
+    study_group_type,
+    lang
+FROM silver_curr_data
