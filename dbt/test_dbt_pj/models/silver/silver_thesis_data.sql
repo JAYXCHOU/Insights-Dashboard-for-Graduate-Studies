@@ -23,3 +23,4 @@ SELECT
     pub_DatePass
 FROM
 bronze.thesis
+WHERE CAST(stu_id AS INT) >= 5800000;
