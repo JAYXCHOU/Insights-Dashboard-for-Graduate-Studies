@@ -37,6 +37,8 @@ joined_with_student AS (
         ds.cur_id,
         ds.cur_rn,
         ds.Brn_ID,
+        ds.Sub_Brn_ID,
+        ds.study_type,
         ds.stu_prg_plan,
         ds.stu_app_plan,
         td.step_id,
@@ -52,12 +54,15 @@ fact_miles AS(
     SELECT
 
         jws.stu_id,
-        dc.curriculum_id,
-        dc.cur_id,
-        dc.cur_rn,
-        dc.Brn_ID,
-        jws.stu_prg_plan,
-        jws.stu_app_plan,
+        dc.curriculum_key,
+        -- dc.cur_id,
+        -- dc.cur_rn,
+        -- dc.Brn_ID,
+        -- dc.Sub_Brn_ID,
+        -- dc.study_plan,
+        -- dc.study_type,
+        -- jws.stu_prg_plan,
+        -- jws.stu_app_plan,
         jws.step_id,
         jws.ID_form,
         dd.date_key As add_date,
@@ -67,9 +72,11 @@ fact_miles AS(
 
     Left JOIN {{ref('dim_curriculum')}} dc
         ON jws.cur_id = dc.cur_id
-        AND jws.cur_rn = dc.cur_rn
-        AND jws.Brn_ID = dc.Brn_ID
+        -- AND jws.cur_rn = dc.cur_rn
+        -- AND jws.Brn_ID = dc.Brn_ID
         AND jws.stu_prg_plan = dc.study_plan
+        -- AND jws.Sub_Brn_ID = dc.Sub_Brn_ID
+        AND jws.study_type = dc.study_type
 
     LEFT JOIN {{ref('dim_date')}} dd    
         ON jws.add_date_key = dd.date_key

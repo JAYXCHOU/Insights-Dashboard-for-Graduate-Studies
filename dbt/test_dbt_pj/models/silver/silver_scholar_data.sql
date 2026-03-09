@@ -12,3 +12,4 @@ SELECT
     Amount
 FROM
 bronze.scholar
+WHERE CAST(stu_id AS INT) >= 5800000;

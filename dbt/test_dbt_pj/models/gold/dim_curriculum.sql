@@ -20,7 +20,7 @@
 
 SELECT
     ROW_NUMBER() OVER (ORDER BY cur_id, cur_rn, study_plan) AS curriculum_key,
-    CONCAT(cur_id, '_', cur_rn, '-', study_plan, '-', Brn_ID) AS curriculum_id,
+    CONCAT(cur_id, '_', cur_rn, '_', study_plan, '_', Brn_ID,'_', Sub_Brn_ID) AS curriculum_id,
     cur_id,
     cur_rn,
     study_plan,
