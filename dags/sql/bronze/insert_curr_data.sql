@@ -78,5 +78,7 @@ dbo.ICT_curriculum sc
 WHERE  NOT EXISTS (
     SELECT 1
     FROM bronze.curriculum bc
-    WHERE sc.cur_id = bc.cur_id
+    WHERE 
+    sc.cur_id = bc.cur_id 
+    AND sc.cur_rn = bc.cur_rn
 );
