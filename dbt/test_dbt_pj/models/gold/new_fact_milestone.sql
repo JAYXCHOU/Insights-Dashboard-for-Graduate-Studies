@@ -29,6 +29,27 @@ Union_pt_pd_pub AS(
         td.add_date_key,
         td.submit_date_key
     FROM thesis_data td
+
+    UNION ALL
+
+    Select 
+        stu_id,
+        ID_form,
+        step_id,
+        add_date_key,
+        Null As submit_date_key
+    from silver_thesis_submission_data
+
+    UNION ALL
+    
+    Select 
+        stu_id,
+        ID_form,
+        step_id,
+        add_date_key,
+        Null As submit_date_key
+    from silver_thesis_approve_data
+
 ),
 
 joined_with_student AS (
