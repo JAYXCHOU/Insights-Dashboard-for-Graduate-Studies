@@ -36,4 +36,5 @@ WHERE NOT EXISTS (
         d.stu_id = t.stu_id
         AND d.ID_form = t.ID_form
         AND d.add_date = t.add_date
-)
+        and d.submit_date = t.submit_date
+);

@@ -30,7 +30,7 @@ SELECT
   c.[เว็บไซต์ ] AS web,
   c.[ชื่่อปริญญา (th) ] AS deg_name_th,
   c.[ชื่่อปริญญา (en) ] AS deg_name_en,
-  c.Brn_ID,
+  ISNULL(c.Brn_ID,'00') AS Brn_ID,
   c.Sub_Brn_ID,
   c.[วิชาเอก (th) ] AS major_name_th,
   c.[วิชาเอก (en) ] AS major_name_en,
