@@ -5,17 +5,33 @@ SELECT
     form_name_en,
     step_id,
     step,
-    TRY_CONVERT(DATE, add_date, 111) AS add_date,
+
+    -- TRY_CONVERT(DATE, add_date, 111) AS add_date,
+    -- CAST(
+    --     CONVERT(VARCHAR(8), 
+    --         TRY_CONVERT(DATE, add_date, 111),112)
+    -- AS INT) AS add_date_key,
     CAST(
         CONVERT(VARCHAR(8), 
-            TRY_CONVERT(DATE, add_date, 111),112)
+            DATEADD(YEAR, 543, 
+                TRY_CONVERT(DATE, add_date, 111)
+            )
+        ,112)
     AS INT) AS add_date_key,
-    
-    TRY_CONVERT(DATE, submit_date, 111) AS submit_date,
-    CAST(
+    -- TRY_CONVERT(DATE, submit_date, 111) AS submit_date,
+    -- CAST(
+    --     CONVERT(VARCHAR(8), 
+    --         TRY_CONVERT(DATE, submit_date, 111),112)
+    -- AS INT) AS submit_date_key,
+
+     CAST(
         CONVERT(VARCHAR(8), 
-            TRY_CONVERT(DATE, submit_date, 111),112)
+            DATEADD(YEAR, 543, 
+                TRY_CONVERT(DATE, submit_date, 111)
+            )
+        ,112)
     AS INT) AS submit_date_key,
+
     PD_DateNo,
     pd_DatePass ,
     pt_dateno,
@@ -23,3 +39,4 @@ SELECT
     pub_DatePass
 FROM
 bronze.thesis
+WHERE CAST(stu_id AS INT) >= 5800000;

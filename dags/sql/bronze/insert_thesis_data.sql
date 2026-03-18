@@ -28,10 +28,13 @@ SELECT
     pub_DateNo,
     pub_DatePass
 From 
-dbo.ICT_Thesis_Data td
-
--- WHERE NOT EXISTS(
---     SELECT 1 FROM 
---     bronze.thesis t
---     WHERE td.stu_id = t.stu_id
--- )
+dbo.ICT_Thesis_Data d
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM bronze.thesis t
+    WHERE 
+        d.stu_id = t.stu_id
+        AND d.ID_form = t.ID_form
+        AND d.add_date = t.add_date
+        and d.submit_date = t.submit_date
+);

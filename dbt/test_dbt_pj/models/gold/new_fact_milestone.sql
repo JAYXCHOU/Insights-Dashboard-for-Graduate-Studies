@@ -1,23 +1,3 @@
--- SELECT
---     s.stu_id,
---     s.cur_id,
---     dm.ID_form,
---     std.step_id,
---     std.step,
---     dd.date_key
-
--- FROM {{ref('silver_thesis_data')}} std
-
--- LEFT JOIN {{ ref('dim_milestone')}} dm
---  ON std.ID_form = dm.ID_form
-
--- LEFT JOIN {{ ref('dim_student')}} s
---  ON std.stu_id = s.stu_ID
-
--- -- LEFT JOIN {{ref('dim_curriculum')}} c
--- --     ON std.
--- LEFT JOIN {{ref('dim_date')}} dd
---  ON std.add_date_key = dd.date_key
 
 WITH thesis_data AS(
     SELECT
@@ -29,6 +9,47 @@ WITH thesis_data AS(
     FROM {{ref('silver_thesis_data')}} std
     LEFT JOIN {{ref ('dim_milestone')}} dm
         on std.ID_form = dm.ID_form
+),
+
+Union_pt_pd_pub AS(
+    SELECT 
+    stu_id, 
+    ID_form,
+    '0' as step_id, 
+    CAST(start_date AS int) AS add_date_key, 
+    CAST(pass_date AS int) AS submit_date_key
+    FROM {{ref('silver_pd_pt_pub_data')}} spd
+
+    UNION ALL
+
+    SELECT 
+        td.stu_id,
+        CAST(td.ID_form AS VARCHAR(10)) as ID_form,
+        CAST(td.step_id AS VARCHAR(10)) as step_id,
+        td.add_date_key,
+        td.submit_date_key
+    FROM thesis_data td
+
+    UNION ALL
+
+    Select 
+        stu_id,
+        ID_form,
+        step_id,
+        add_date_key,
+        Null As submit_date_key
+    from silver_thesis_submission_data
+
+    UNION ALL
+    
+    Select 
+        stu_id,
+        ID_form,
+        step_id,
+        add_date_key,
+        Null As submit_date_key
+    from silver_thesis_approve_data
+
 ),
 
 joined_with_student AS (
@@ -45,7 +66,7 @@ joined_with_student AS (
         td.ID_form,
         td.add_date_key,
         td.submit_date_key
-    FROM thesis_data td
+    FROM Union_pt_pd_pub td
     Left JOIN {{ref('dim_student')}} ds
         on  td.stu_id = ds.stu_id
 ),
@@ -54,16 +75,10 @@ fact_miles AS(
     SELECT
         jws.stu_id,
         dc.curriculum_key,
-        -- dc.cur_id,
-        -- dc.cur_rn,
-        -- dc.Brn_ID,
-        -- dc.Sub_Brn_ID,
-        -- dc.study_plan,
-        -- dc.study_type,
-        -- jws.stu_prg_plan,
-        -- jws.stu_app_plan,
+ 
         jws.step_id,
         jws.ID_form,
+
         dd.date_key As add_date,
         dd2.date_key AS submit_date
 
@@ -73,8 +88,6 @@ fact_miles AS(
         ON jws.cur_id = dc.cur_id
         AND jws.cur_rn = dc.cur_rn
         AND jws.stu_prg_plan = dc.study_plan
-        -- AND jws.Brn_ID = dc.Brn_ID
-        -- AND jws.Sub_Brn_ID = dc.Sub_Brn_ID
         AND jws.study_type = dc.study_type
 
     LEFT JOIN {{ref('dim_date')}} dd    
@@ -84,6 +97,6 @@ fact_miles AS(
         ON jws.submit_date_key = dd2.date_key
 )
 
-SELECT * From fact_miles;
+SELECT * From fact_miles WHERE stu_id is NOT NULL;
 
 

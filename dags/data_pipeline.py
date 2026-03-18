@@ -30,10 +30,10 @@ with DAG(
         sql="sql/bronze/create_scholar_table.sql"
     )
 
-    craete_curriculum_table = SQLExecuteQueryOperator(
+    create_curriculum_table = SQLExecuteQueryOperator(
         task_id="create_bronze_curriculum_table",
         conn_id="mssql_default",
-        sql="sql/bronze/craete_curriculum_table.sql"
+        sql="sql/bronze/create_curriculum_table.sql"
     )
 
     create_curriculum_cyc_table = SQLExecuteQueryOperator(
@@ -46,6 +46,19 @@ with DAG(
         task_id="create_bronze_thesis_table",
         conn_id="mssql_default",
         sql="sql/bronze/create_thesis_table.sql"
+    )
+
+    
+    create_thesis_approve_table = SQLExecuteQueryOperator(
+        task_id="create_bronze_thesis_approve_table",
+        conn_id="mssql_default",
+        sql="sql/bronze/create_thesis_approve_table.sql"
+    )
+ 
+    create_thesis_submission_table = SQLExecuteQueryOperator(
+        task_id="create_bronze_thesis_submission_table",
+        conn_id="mssql_default",
+        sql="sql/bronze/create_thesis_submission_table.sql"
     )
 
     insert_curriculum = SQLExecuteQueryOperator(
@@ -75,6 +88,17 @@ with DAG(
         sql="sql/bronze/insert_thesis_data.sql"
     )
 
+    insert_thesis_approve = SQLExecuteQueryOperator(
+        task_id = "insert_thesis_approve",
+        conn_id = "mssql_default",
+        sql="sql/bronze/insert_thesis_approve_data.sql"
+    )
+    insert_thesis_submission = SQLExecuteQueryOperator(
+        task_id = "insert_thesis_submission",
+        conn_id = "mssql_default",
+        sql="sql/bronze/insert_thesis_submission_data.sql"
+    )
+
     dbt_run_silver= BashOperator(
     task_id="dbt_run_silver",
     bash_command="cd /opt/airflow/dbt/test_dbt_pj && dbt run --select silver"
@@ -87,9 +111,11 @@ with DAG(
 create_table = [
     create_student_table,
     create_scholar_table,
-    craete_curriculum_table,
+    create_curriculum_table,
     create_curriculum_cyc_table,
-    create_thesis_table
+    create_thesis_table,
+    create_thesis_approve_table,
+    create_thesis_submission_table
 ]
 
 insert_data = [
@@ -97,7 +123,9 @@ insert_data = [
     insert_scholar,
     insert_curriculum,
     insert_curriculum_cyc,
-    insert_thesis
+    insert_thesis,
+    insert_thesis_approve,
+    insert_thesis_submission
 ]
 
 create_schema >> create_table 
