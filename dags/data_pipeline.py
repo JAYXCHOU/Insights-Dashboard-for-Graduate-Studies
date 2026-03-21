@@ -61,6 +61,30 @@ with DAG(
         sql="sql/bronze/create_thesis_submission_table.sql"
     )
 
+    create_gradestu_table = SQLExecuteQueryOperator(
+        task_id="create_bronze_gradestu_table",
+        conn_id="mssql_default",
+        sql="sql/bronze/create_gradestu_table.sql"
+    )
+ 
+    create_invoice_table = SQLExecuteQueryOperator(
+        task_id="create_bronze_invoice_table",
+        conn_id="mssql_default",
+        sql="sql/bronze/create_invoice_table.sql"
+    )
+ 
+    create_subject_table = SQLExecuteQueryOperator(
+        task_id="create_bronze_subject_table",
+        conn_id="mssql_default",
+        sql="sql/bronze/create_subject_table.sql"
+    )
+ 
+    create_register_table = SQLExecuteQueryOperator(
+        task_id="create_bronze_register_table",
+        conn_id="mssql_default",
+        sql="sql/bronze/create_register_table.sql"
+    )
+
     insert_curriculum = SQLExecuteQueryOperator(
         task_id="insert_curriculum",
         conn_id="mssql_default",
@@ -98,6 +122,30 @@ with DAG(
         conn_id = "mssql_default",
         sql="sql/bronze/insert_thesis_submission_data.sql"
     )
+    insert_gradestu = SQLExecuteQueryOperator(
+        task_id="insert_gradestu",
+        conn_id="mssql_default",
+        sql="sql/bronze/insert_gradestu_data.sql"
+    )
+ 
+    insert_invoice = SQLExecuteQueryOperator(
+        task_id="insert_invoice",
+        conn_id="mssql_default",
+        sql="sql/bronze/insert_invoice_data.sql"
+    )
+ 
+    insert_subject = SQLExecuteQueryOperator(
+        task_id="insert_subject",
+        conn_id="mssql_default",
+        sql="sql/bronze/insert_subject_data.sql"
+    )
+ 
+    insert_register = SQLExecuteQueryOperator(
+        task_id="insert_register",
+        conn_id="mssql_default",
+        sql="sql/bronze/insert_register_data.sql"
+    )
+
 
     dbt_run_silver= BashOperator(
     task_id="dbt_run_silver",
@@ -115,7 +163,11 @@ create_table = [
     create_curriculum_cyc_table,
     create_thesis_table,
     create_thesis_approve_table,
-    create_thesis_submission_table
+    create_thesis_submission_table,
+    create_gradestu_table,
+    create_invoice_table,
+    create_subject_table,
+    create_register_table
 ]
 
 insert_data = [
@@ -125,7 +177,11 @@ insert_data = [
     insert_curriculum_cyc,
     insert_thesis,
     insert_thesis_approve,
-    insert_thesis_submission
+    insert_thesis_submission,
+    insert_gradestu,
+    insert_invoice,
+    insert_subject,
+    insert_register
 ]
 
 create_schema >> create_table 
