@@ -1,17 +1,13 @@
+pycache/
+*.pyc
+
+logs/
+*.log
 
 target/
 dbt_packages/
-<<<<<<< HEAD
-logs/
-=======
-
-.log
-logs/
-__pycache__/
-*.pyc
-
-.env
 
 profiles/
-profiles.yml
->>>>>>> f67645424f3c792b96dd1c503c94bbfa29611b9e
+.env
+
+*.user.yml
