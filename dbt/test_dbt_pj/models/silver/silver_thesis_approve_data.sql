@@ -1,9 +1,10 @@
 SELECT
     stu_id
     ,rn
-    ,Gr_ID
+    ,Gr_ID,
+    'aprv' as ID_form
 
-    ,status_apv AS ID_form
+    ,status_apv AS ID_form_by
     ,status_apv_desc
     
     ,QA As step_id
