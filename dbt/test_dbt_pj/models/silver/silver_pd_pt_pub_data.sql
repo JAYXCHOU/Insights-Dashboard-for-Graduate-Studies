@@ -2,9 +2,7 @@ WITH union_data AS(
 SELECT DISTINCT
     stu_id,
     'pd39' AS event_type,
-    -- PD_DateNo AS date_no,
     Replace(PD_DateNo,'/','') AS date_no, 
-    -- pd_DatePass AS date_pass
     Replace(pd_DatePass,'/','') AS date_pass
 
 From  bronze.thesis
@@ -14,9 +12,8 @@ UNION ALL
 SELECT DISTINCT
   stu_id,
   'pt1' AS event_type,
---   pt_dateno AS date_no,
-  Replace(pt_dateno,'/','') AS date_no,
-  NULL AS date_pass
+  NULL AS  date_no,
+  Replace(pt_dateno,'/','') AS date_pass
 From  bronze.thesis
 WHERE CAST(stu_id AS INT) >= 5800000
 UNION ALL

@@ -1,37 +1,3 @@
-
--- WITH join_event AS (
---     SELECT 
---         std.stu_id,
---         dm.ID_form_name as ID_form,
---         std.submit_date_key as submit_date,
---         NULL as pass_date
---     FROM silver_thesis_data std
---     LEFT JOIN dim_milestone dm ON
---         CAST(std.ID_form AS varchar(4)) = dm.ID_form
---         AND dm.ID_form IN ('2', '3', '4')
-
---     UNION ALL
-
---     SELECT 
---         p.stu_id,
---         dm.ID_form_name AS ID_form,
---         NULL AS submit_date,
---         p.pass_date
---     FROM silver_pd_pt_pub_data p
---     LEFT JOIN dim_milestone dm 
---         ON CAST(p.ID_form AS varchar(20)) = dm.ID_form
-
--- )
--- SELECT 
---     stu_id,
---     ID_form,
---     MIN(submit_date) AS submit_date,
---     MAX(pass_date) AS pass_date,
---     COUNT(*) AS count_action
--- FROM join_event
--- GROUP BY 
---     stu_id, ID_form
-
 WITH event_thesis AS (
     SELECT 
         stu_id,
@@ -95,7 +61,7 @@ agg As(
         id_form,
         MIN(event_date) AS submit_date,
         max(event_date) AS pass_date,
-        Count(*) as count_action
+        Count(CASE WHEN event_date IS NOT NULL THEN 1 END) as count_action
     FROM join_milestone
     GROUP BY stu_id, ID_form
 ),
@@ -124,7 +90,7 @@ Select
     c.id_form,
     a.submit_date,
     a.pass_date,
-    count_action
+    a.count_action
 from cross_join c 
 LEFT JOIN agg a
     ON a.stu_id = c.stu_id
