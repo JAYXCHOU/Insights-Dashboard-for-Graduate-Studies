@@ -7,3 +7,4 @@ SELECT
     max_term
 FROM
 bronze.curriculum_cyc
+WHERE [plan] IN ('ก1', 'ก2', 'ข', '1.1', '1.2', '2.1', '2.2')
