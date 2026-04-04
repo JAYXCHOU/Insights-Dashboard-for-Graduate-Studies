@@ -6,7 +6,8 @@ SELECT DISTINCT
     Replace(pd_DatePass,'/','') AS date_pass
 
 From  bronze.thesis
-WHERE CAST(stu_id AS INT) >= 5800000
+WHERE TRY_CAST(stu_id AS INT) >= 5800000
+
 UNION ALL
 
 SELECT DISTINCT
@@ -15,18 +16,17 @@ SELECT DISTINCT
   NULL AS  date_no,
   Replace(pt_dateno,'/','') AS date_pass
 From  bronze.thesis
-WHERE CAST(stu_id AS INT) >= 5800000
+WHERE TRY_CAST(stu_id AS INT) >= 5800000
+
 UNION ALL
 
 SELECT DISTINCT
   stu_id,
   'pub2' AS event_type,
---   pub_DateNo AS date_no,
   Replace(pub_DateNo,'/','')  AS date_no,
---   pub_DatePass AS date_pass
-    Replace(pub_DatePass,'/','') AS date_pass
+  Replace(pub_DatePass,'/','') AS date_pass
 From  bronze.thesis
-WHERE CAST(stu_id AS INT) >= 5800000
+WHERE TRY_CAST(stu_id AS INT) >= 5800000
 ),
 
 Clean_data AS(
@@ -42,18 +42,40 @@ Clean_data AS(
         '๐','0'),'๑','1'),'๒','2'),'๓','3'),'๔','4'),
         '๕','5'),'๖','6'),'๗','7'),'๘','8'),'๙','9') AS date_pass_th_num_fixed
     FROM union_data
+),
+
+be_fixed AS (
+    SELECT
+        stu_id,
+        event_type,
+        -- Handle missing day: literal '__' placeholder OR '00' value
+        CASE
+            WHEN date_no_th_num_fixed   LIKE '%[_][_]'   THEN LEFT(date_no_th_num_fixed,   6) + '01'
+            WHEN RIGHT(date_no_th_num_fixed,   2) = '00' THEN LEFT(date_no_th_num_fixed,   6) + '01'
+            ELSE date_no_th_num_fixed
+        END AS start_date_be,
+        CASE
+            WHEN date_pass_th_num_fixed LIKE '%[_][_]'   THEN LEFT(date_pass_th_num_fixed, 6) + '01'
+            WHEN RIGHT(date_pass_th_num_fixed, 2) = '00' THEN LEFT(date_pass_th_num_fixed, 6) + '01'
+            ELSE date_pass_th_num_fixed
+        END AS pass_date_be
+    FROM Clean_data
 )
 
 SELECT
     stu_id,
-    event_type as ID_form,
-    CASE 
-        WHEN date_no_th_num_fixed Like '%__' THEN  Replace(date_no_th_num_fixed,'__','01') 
-        -- Else Replace(date_no_th_num_fixed,'/','') 
-        Else date_no_th_num_fixed End As start_date,
-    CASE 
-        WHEN date_pass_th_num_fixed Like '%__' THEN  Replace(date_pass_th_num_fixed,'__','01') 
-        ELSE date_pass_th_num_fixed End As pass_date
-        -- Else   Replace(date_pass_th_num_fixed,'/','') End As pass_date
-    -- date_pass_th_num_fixed as pass_date
-FROM Clean_data
+    event_type AS ID_form,
+
+    CASE
+        WHEN LEN(start_date_be) = 8
+        THEN start_date_be
+        ELSE NULL
+    END AS start_date,
+
+    CASE
+        WHEN LEN(pass_date_be) = 8
+        THEN pass_date_be
+        ELSE NULL
+    END AS pass_date
+
+FROM be_fixed

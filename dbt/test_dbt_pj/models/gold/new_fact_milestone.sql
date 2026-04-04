@@ -2,7 +2,7 @@
 WITH thesis_data AS(
     SELECT
     std.stu_id,
-    std.step_id,
+    -- std.step_id,
     dm.ID_form,
     std.add_date_key,
     std.submit_date_key
@@ -15,7 +15,7 @@ Union_pt_pd_pub AS(
     SELECT 
     stu_id, 
     ID_form,
-    '0' as step_id, 
+    -- '0' as step_id, 
     CAST(start_date AS int) AS add_date_key, 
     CAST(pass_date AS int) AS submit_date_key
     FROM {{ref('silver_pd_pt_pub_data')}} spd
@@ -25,7 +25,7 @@ Union_pt_pd_pub AS(
     SELECT 
         td.stu_id,
         CAST(td.ID_form AS VARCHAR(10)) as ID_form,
-        CAST(td.step_id AS VARCHAR(10)) as step_id,
+        -- CAST(td.step_id AS VARCHAR(10)) as step_id,
         td.add_date_key,
         td.submit_date_key
     FROM thesis_data td
@@ -35,7 +35,7 @@ Union_pt_pd_pub AS(
     Select 
         stu_id,
         ID_form,
-        step_id,
+        -- step_id,
         add_date_key,
         Null As submit_date_key
     from silver_thesis_submission_data
@@ -45,7 +45,7 @@ Union_pt_pd_pub AS(
     Select 
         stu_id,
         ID_form,
-        step_id,
+        -- step_id,
         add_date_key,
         Null As submit_date_key
     from silver_thesis_approve_data
@@ -62,7 +62,7 @@ joined_with_student AS (
         ds.study_type,
         ds.stu_prg_plan,
         ds.stu_app_plan,
-        td.step_id,
+        -- td.step_id,
         td.ID_form,
         td.add_date_key,
         td.submit_date_key
@@ -76,7 +76,7 @@ fact_miles AS(
         jws.stu_id,
         dc.curriculum_key,
  
-        jws.step_id,
+        -- jws.step_id,
         jws.ID_form,
 
         dd.date_key As add_date,
