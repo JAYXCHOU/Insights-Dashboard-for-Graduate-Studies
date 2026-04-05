@@ -75,12 +75,12 @@ fact_miles AS(
     SELECT
         jws.stu_id,
         dc.curriculum_key,
- 
+
         -- jws.step_id,
         jws.ID_form,
 
-        dd.date_key As add_date,
-        dd2.date_key AS submit_date
+        dd.date_key As submit_date,
+        dd2.date_key AS pass_date
 
     FROM joined_with_student jws
 

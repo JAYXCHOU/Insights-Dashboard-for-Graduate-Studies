@@ -84,8 +84,11 @@ cross_join AS (
         m.id_form
     FROM stu s
     CROSS JOIN milestone m
-)
-Select 
+),
+
+
+final As(
+    Select 
     c.stu_id,
     c.id_form,
     a.submit_date,
@@ -95,3 +98,48 @@ from cross_join c
 LEFT JOIN agg a
     ON a.stu_id = c.stu_id
     And a.id_form = c.id_form
+
+),
+
+joined_with_student AS(
+    SELECT
+        ds.stu_id,
+        ds.cur_id,
+        ds.cur_rn,
+        ds.study_type,
+        ds.stu_prg_plan,
+
+        f.id_form,
+        f.submit_date,
+        f.pass_date,
+        f.count_action
+
+    from final f
+    Left JOIN {{ref('dim_student')}} ds
+        on  f.stu_id = ds.stu_id
+),
+
+fact_sum_mile AS(
+    SELECT
+        jws.stu_id,
+        dc.curriculum_key,
+        jws.ID_form,
+        dd.date_key As submit_date,
+        dd2.date_key AS pass_date,
+        jws.count_action
+
+    from joined_with_student jws
+    Left JOIN {{ref('dim_curriculum')}} dc
+        ON jws.cur_id = dc.cur_id
+        AND jws.cur_rn = dc.cur_rn
+        AND jws.stu_prg_plan = dc.study_plan
+        AND jws.study_type = dc.study_type
+
+    LEFT JOIN {{ref('dim_date')}} dd    
+        ON jws.submit_date = dd.date_key
+
+    LEFT JOIN {{ref('dim_date')}} dd2
+        ON jws.pass_date = dd2.date_key
+)
+
+SELECT * from fact_sum_mile WHERE stu_id is NOT NULL;
