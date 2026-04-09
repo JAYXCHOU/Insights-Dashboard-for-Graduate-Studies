@@ -19,7 +19,7 @@ with DAG(
     )
 
     create_student_table = SQLExecuteQueryOperator(
-        task_id="create_bronz_student_table",
+        task_id="create_bronze_student_table",
         conn_id="mssql_default",
         sql="sql/bronze/create_student_table.sql"
     )
@@ -84,6 +84,31 @@ with DAG(
         conn_id="mssql_default",
         sql="sql/bronze/create_register_table.sql"
     )
+
+    create_stu_snonstu_table = SQLExecuteQueryOperator(
+        task_id="create_bronze_stu_snonstu_table",
+        conn_id="mssql_default",
+        sql="sql/bronze/create_stu_snonstu_table.sql"
+    )
+
+    create_sta_nonstu_table = SQLExecuteQueryOperator(
+    task_id="create_bronze_sta_nonstu_table",
+    conn_id="mssql_default",
+    sql="sql/bronze/create_sta_nonstu_table.sql"
+    )
+
+    insert_stu_snonstu = SQLExecuteQueryOperator(
+        task_id="insert_stu_snonstu",
+        conn_id="mssql_default",
+        sql="sql/bronze/insert_stu_snonstu_data.sql"
+    )
+
+    insert_sta_nonstu = SQLExecuteQueryOperator(
+        task_id="insert_sta_nonstu",
+        conn_id="mssql_default",
+        sql="sql/bronze/insert_sta_nonstu_data.sql"
+    )
+
 
     insert_curriculum = SQLExecuteQueryOperator(
         task_id="insert_curriculum",
@@ -167,7 +192,9 @@ create_table = [
     create_gradestu_table,
     create_invoice_table,
     create_subject_table,
-    create_register_table
+    create_register_table,
+    create_stu_snonstu_table,
+    create_sta_nonstu_table
 ]
 
 insert_data = [
@@ -181,7 +208,9 @@ insert_data = [
     insert_gradestu,
     insert_invoice,
     insert_subject,
-    insert_register
+    insert_register,
+    insert_stu_snonstu,
+    insert_sta_nonstu
 ]
 
 create_schema >> create_table 
