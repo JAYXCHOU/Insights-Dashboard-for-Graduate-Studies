@@ -20,15 +20,15 @@ WITH joined_data AS (
 clean_data AS (
     SELECT
         stu_id,
-        snon_term,
-        snon_year,
+        TRY_CAST(snon_term AS INT) AS snon_term,  -- ไม่ใช่เลข → NULL
+        TRY_CAST(snon_year AS INT) AS snon_year,  -- ไม่ใช่เลข → NULL
         snon_memo,
         nstu_id,
         nstu_des_thai,
         nstu_des_eng,
         REPLACE(sta_outdate, '/', '') AS sta_outdate_clean
     FROM joined_data
-    WHERE rn = 1  -- เอาแค่แถวแรกของแต่ละกลุ่ม
+    WHERE rn = 1
 ),
 
 final_data AS (
