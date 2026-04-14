@@ -30,7 +30,7 @@ SELECT DISTINCT
     max_year,
     Bench_id, 
     criteria,
-    occup_id
+    occup_id,
     occup_name,
     groupN_id,
     study_group_type,
