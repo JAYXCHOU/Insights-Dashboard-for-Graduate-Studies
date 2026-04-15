@@ -2,6 +2,7 @@ SELECT
     s.stu_id,
     sc.Sch_ID,
     ssd.Amount
+
 FROM{{ref('silver_scholar_data')}} ssd
 
 LEFT JOIN {{ ref('dim_scholar')}} sc

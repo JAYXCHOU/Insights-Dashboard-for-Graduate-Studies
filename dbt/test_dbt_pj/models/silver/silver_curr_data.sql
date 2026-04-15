@@ -1,4 +1,5 @@
-SELECT
+WITH cleaned_curr As(
+  SELECT
   c.cur_id,
   c.cur_rn,
   c.study_type,
@@ -16,16 +17,6 @@ SELECT
   c.cur_pla_1_2,
   c.cur_pla_2_1,
   c.cur_pla_2_2,
-   -- CASE cur_pla_col
-   --    WHEN 'cur_pla_a1' THEN 'ก1'
-   --    WHEN 'cur_pla_a2'THEN 'ก2'
-   --    WHEN 'cur_pla_b' THEN 'ข'
-   --    WHEN 'cur_pla_1_1' THEN '1.1'
-   --    WHEN 'cur_pla_1_2' THEN '1.2'
-   --    WHEN 'cur_pla_2_1' THEN '2.1'
-   --    WHEN 'cur_pla_2_2' THEN '2.2'
-   --    ELSE 'other'
-   -- END AS study_plan,
   v.study_plan,
   c.[เว็บไซต์ ] AS web,
   c.[ชื่่อปริญญา (th) ] AS deg_name_th,
@@ -59,3 +50,8 @@ CROSS APPLY(
       (c.cur_pla_2_2, '2.2')
 ) v(flag, study_plan)
 WHERE v.flag = 'T'
+)
+
+SELECT * FROM
+cleaned_curr
+
