@@ -11,7 +11,7 @@ event_pass AS (
     SELECT 
         stu_id,
         CAST(ID_form AS varchar(10)) AS ID_form,
-        pass_date AS event_date,
+        pass_date_key AS event_date,
         'pd_pt_pub' AS event_type
     FROM silver_pd_pt_pub_data
 ),
@@ -133,8 +133,8 @@ fact_sum_mile AS(
         dc.curriculum_key,
         jws.ID_form,
         jws.id_form_name,
-        dd.date_key As submit_date,
-        dd2.date_key AS pass_date,
+        dd.date_display As submit_date,
+        dd2.date_display AS pass_date,
         jws.count_action
 
     from joined_with_student jws
@@ -151,4 +151,13 @@ fact_sum_mile AS(
         ON jws.pass_date = dd2.date_key
 )
 
-SELECT * from fact_sum_mile WHERE stu_id is NOT NULL;
+SELECT 
+    stu_id,
+    curriculum_key,
+    ID_form,
+    id_form_name,
+    submit_date,
+    pass_date,
+    count_action
+from fact_sum_mile 
+WHERE stu_id is NOT NULL;

@@ -74,17 +74,19 @@ final_data AS (
 SELECT 
     f.stu_id,
     f.snon_term,
-    f.snon_year,
+    CASE WHEN f.snon_year Is Null Or LTRIM(RTRIM(f.snon_year)) = '' THEN NULL
+    Else CAST(f.snon_year as Int) - 543 
+    End AS snon_year,
     f.snon_memo,
     f.nstu_id,
     f.nstu_status_type_thai,
     f.nstu_status_reason_thai,
     f.nstu_status_type_eng,
     f.nstu_status_reason_eng,
-    f.sta_outdate
+    CONVERT(VARCHAR(10),DATEADD(YEAR, -543, TRY_CONVERT(DATE, f.sta_outdate, 111)),111) AS sta_outdate
+
 FROM final_data f
 Left join silver_student_data sd
 ON  f.stu_id = sd.stu_id
-
-WHERE CAST(sd.stu_adm_year AS INT) >= 2558;
+WHERE CAST(sd.stu_adm_year AS INT) >= 2015;
 

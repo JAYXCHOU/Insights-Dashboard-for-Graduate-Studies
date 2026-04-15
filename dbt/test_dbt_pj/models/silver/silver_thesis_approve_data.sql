@@ -23,11 +23,13 @@ SELECT
     END                                                 AS QA_desc
     ,a.QA_text
     ,a.apv_time,
-    CONVERT(VARCHAR(8), DATEADD(YEAR, 543, CAST(a.apv_time AS DATETIME)), 112) AS add_date_key
+    CONVERT(VARCHAR(10), CAST(a.apv_time AS DATETIME), 112) AS add_date_key,
+
+    CONVERT(VARCHAR(10), CAST(a.apv_time AS DATETIME), 111) AS add_date
 
 FROM bronze.thesis_approve a
 
 Left join silver_student_data sd
 ON  a.stu_id = sd.stu_id
 
-WHERE CAST(sd.stu_adm_year AS INT) >= 2558;
+WHERE CAST(sd.stu_adm_year AS INT) >= 2015;

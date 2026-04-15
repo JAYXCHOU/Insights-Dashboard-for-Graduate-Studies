@@ -89,13 +89,25 @@ SELECT
     f.stu_ID,
     f.Sch_ID,
     f.Scholar_thai,
-    f.Scholar_eng ,
-    f.Rec_Syear,
+    f.Scholar_eng,
+        
+    CASE WHEN f.Rec_Syear  IS NULL OR LTRIM(RTRIM(f.Rec_Syear )) = '' THEN NULL
+    ELSE TRY_CAST(f.Rec_Syear  as INT) - 543
+    END as Rec_Syear,
     f.F_Term,
-    f.Rec_Eyear,
+
+    CASE 
+    WHEN f.Rec_Eyear IS NULL 
+         OR LTRIM(RTRIM(f.Rec_Eyear)) = ''
+         OR TRY_CAST(f.Rec_Eyear AS INT) = 0
+    THEN NULL
+    ELSE TRY_CAST(f.Rec_Eyear AS INT) - 543
+    END AS Rec_Eyear,
+    
     f.L_Term,
-    f.GetDate,
-    f.FinalDate,
+
+    CONVERT(VARCHAR(10),DATEADD(YEAR, -543, TRY_CONVERT(DATE,f.GetDate, 111)),111) as GetDate,
+     CONVERT(VARCHAR(10),DATEADD(YEAR, -543, TRY_CONVERT(DATE,f.FinalDate, 111)),111) as FinalDate,
     f.Amount
     -- f.stu_adm_year
 
@@ -105,5 +117,5 @@ final_data f
 Left join silver_student_data sd
 ON  f.stu_id = sd.stu_id
 
-WHERE CAST(sd.stu_adm_year AS INT) >= 2558;
+WHERE CAST(sd.stu_adm_year AS INT) >= 2015;
 
