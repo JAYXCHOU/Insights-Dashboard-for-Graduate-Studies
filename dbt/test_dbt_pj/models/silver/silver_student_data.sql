@@ -1,13 +1,29 @@
 SELECT
     stu_id,
     stu_deg_lev,
-    stu_adm_date,
-    stu_adm_year,
+    -- stu_adm_date As old_stu_adm_date,
+    CASE
+    WHEN stu_adm_date IS NULL OR LTRIM(RTRIM(stu_adm_date)) = '' THEN NULL
+    ELSE CONVERT(VARCHAR(10),DATEADD(YEAR, -543, TRY_CONVERT(DATE, stu_adm_date, 111)),111)
+    END AS stu_adm_date,
+
+    CASE WHEN stu_adm_year IS NULL OR LTRIM(RTRIM(stu_adm_year)) = '' THEN NULL
+    ELSE TRY_CAST(stu_adm_year as INT) - 543
+    END as stu_adm_year,
+  
     stu_adm_term,
     sta_pres_id,
     sta_pres_des,
-    stu_comp_date,
-    stu_comp_year,
+
+    CASE
+    WHEN stu_comp_date IS NULL OR LTRIM(RTRIM(stu_comp_date)) = '' THEN NULL
+    ELSE CONVERT(VARCHAR(10),DATEADD(YEAR, -543, TRY_CONVERT(DATE, stu_comp_date, 111)),111)
+    END AS stu_comp_date,
+
+    CASE WHEN stu_comp_date IS NULL OR LTRIM(RTRIM(stu_comp_date)) = '' THEN NULL
+    ELSE TRY_CAST(stu_comp_year as INT) - 534 
+    END as stu_comp_year,
+
     stu_comp_term,
     stu_sex,
     stu_gpa_old,
@@ -59,4 +75,4 @@ SELECT
     thesis_name_th
 FROM
 bronze.student_data
-WHERE CAST(stu_adm_year AS INT) >= 2558;
+WHERE stu_adm_year >= 2558;

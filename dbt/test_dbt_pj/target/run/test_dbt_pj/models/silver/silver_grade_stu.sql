@@ -11,9 +11,14 @@
     USE [SeniorPJ_DB];
     EXEC('
         create view "dbo"."silver_grade_stu__dbt_tmp__dbt_tmp_vw" as SELECT
-    g.Stu_ID  AS stu_id,
-    g.Reg_Year,
+    sd.Stu_ID  AS stu_id,
+    
+    CASE WHEN g.Reg_Year IS NULL OR LTRIM(RTRIM(g.Reg_Year)) = '''' THEN NULL
+    ELSE TRY_CAST(g.Reg_Year as INT) - 543
+    END as Reg_Year ,
+
     g.Reg_Term,
+
     g.Subj_ID,
     g.Subj_Rn,
     g.Credit,
@@ -25,7 +30,7 @@ FROM bronze.grade_stu g
 Left join silver_student_data sd
 ON  g.stu_id = sd.stu_id
 
-WHERE CAST(sd.stu_adm_year AS INT) >= 2558;
+WHERE CAST(sd.stu_adm_year AS INT) >= 2015;
     ')
 
 EXEC('
