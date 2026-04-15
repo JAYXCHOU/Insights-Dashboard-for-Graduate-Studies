@@ -71,6 +71,20 @@ final_data AS (
     FROM clean_data
 )
 
-SELECT *
-FROM final_data
-WHERE TRY_CAST(stu_id AS INT) >= 5800000;
+SELECT 
+    f.stu_id,
+    f.snon_term,
+    f.snon_year,
+    f.snon_memo,
+    f.nstu_id,
+    f.nstu_status_type_thai,
+    f.nstu_status_reason_thai,
+    f.nstu_status_type_eng,
+    f.nstu_status_reason_eng,
+    f.sta_outdate
+FROM final_data f
+Left join silver_student_data sd
+ON  f.stu_id = sd.stu_id
+
+WHERE CAST(sd.stu_adm_year AS INT) >= 2558;
+

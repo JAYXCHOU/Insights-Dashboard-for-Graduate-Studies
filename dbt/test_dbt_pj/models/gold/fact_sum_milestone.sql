@@ -47,9 +47,12 @@ all_events AS (
 join_milestone AS (
     SELECT 
         a.stu_id,
-        dm.ID_form_name as ID_form,
+        dm.ID_form,
+        dm.ID_form_name as ID_form_name,
+       
         a.event_date,
         a. event_type
+
     from all_events  a
     LEFT JOIN dim_milestone dm ON
         a.ID_form = dm.ID_form
@@ -58,12 +61,13 @@ join_milestone AS (
 agg As(
     SELECT
         stu_id,
-        id_form,
+        ID_form,
+        ID_form_name,
         MIN(event_date) AS submit_date,
         max(event_date) AS pass_date,
         Count(CASE WHEN event_date IS NOT NULL THEN 1 END) as count_action
     FROM join_milestone
-    GROUP BY stu_id, ID_form
+    GROUP BY stu_id, ID_form, ID_form_name
 ),
 
 stu AS (
@@ -74,14 +78,16 @@ stu AS (
 
 milestone AS (
     SELECT DISTINCT 
-     ID_form_name as id_form
+    ID_form,
+    ID_form_name as id_form_name
     FROM dim_milestone
 ),
 
 cross_join AS (
     SELECT 
         s.stu_id,
-        m.id_form
+        m.ID_form,
+        m.id_form_name
     FROM stu s
     CROSS JOIN milestone m
 ),
@@ -90,7 +96,8 @@ cross_join AS (
 final As(
     Select 
     c.stu_id,
-    c.id_form,
+    c.ID_form,
+    c.id_form_name,
     a.submit_date,
     a.pass_date,
     a.count_action
@@ -109,7 +116,8 @@ joined_with_student AS(
         ds.study_type,
         ds.stu_prg_plan,
 
-        f.id_form,
+        f.ID_form,
+        f.id_form_name,
         f.submit_date,
         f.pass_date,
         f.count_action
@@ -124,6 +132,7 @@ fact_sum_mile AS(
         jws.stu_id,
         dc.curriculum_key,
         jws.ID_form,
+        jws.id_form_name,
         dd.date_key As submit_date,
         dd2.date_key AS pass_date,
         jws.count_action
