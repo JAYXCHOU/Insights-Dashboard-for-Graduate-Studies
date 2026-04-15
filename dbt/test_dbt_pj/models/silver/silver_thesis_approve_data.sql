@@ -3,16 +3,16 @@ SELECT
     ,a.rn
     ,a.Gr_ID,
     'aprv' as ID_form
-
     ,a.status_apv AS ID_form_by
-
     ,a.status_apv_desc
+
     -- QA: 'Y' มี 2 ความหมายขึ้นกับ status_apv
     --   Y + ACD (งานบริการการศึกษา) = รับทราบ  → เปลี่ยนเป็น 'A'
     --   Y + ADV/CHM                  = เห็นชอบ  → คง 'Y' ไว้
     --   ' ' (space)                  = NULL
     ,CASE
         WHEN QA = 'Y' AND a.status_apv = 'ACD' THEN 'A'
+
         WHEN NULLIF(LTRIM(RTRIM(QA)), '') IS NULL      THEN NULL
         ELSE QA
     END                                                 AS QA,

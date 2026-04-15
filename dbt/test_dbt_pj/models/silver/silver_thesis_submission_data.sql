@@ -13,7 +13,7 @@ WITH ranked AS (
     WHERE TRY_CAST(sub_stu AS INT) >= 5800000
 ),
 final As(
-    SELECT
+SELECT
     stu_id,
     ID_form,
     step_id,
