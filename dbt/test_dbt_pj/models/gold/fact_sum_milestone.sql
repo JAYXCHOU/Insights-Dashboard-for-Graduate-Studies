@@ -47,9 +47,12 @@ all_events AS (
 join_milestone AS (
     SELECT 
         a.stu_id,
-        dm.ID_form_name as ID_form,
+        dm.ID_form,
+        dm.ID_form_name as ID_form_name,
+       
         a.event_date,
         a. event_type
+
     from all_events  a
     LEFT JOIN dim_milestone dm ON
         a.ID_form = dm.ID_form
@@ -58,12 +61,13 @@ join_milestone AS (
 agg As(
     SELECT
         stu_id,
-        id_form,
+        ID_form,
+        ID_form_name,
         MIN(event_date) AS submit_date,
         max(event_date) AS pass_date,
         Count(CASE WHEN event_date IS NOT NULL THEN 1 END) as count_action
     FROM join_milestone
-    GROUP BY stu_id, ID_form
+    GROUP BY stu_id, ID_form, ID_form_name
 ),
 
 stu AS (
@@ -74,20 +78,26 @@ stu AS (
 
 milestone AS (
     SELECT DISTINCT 
-     ID_form_name as id_form
+    ID_form,
+    ID_form_name as id_form_name
     FROM dim_milestone
 ),
 
 cross_join AS (
     SELECT 
         s.stu_id,
-        m.id_form
+        m.ID_form,
+        m.id_form_name
     FROM stu s
     CROSS JOIN milestone m
-)
-Select 
+),
+
+
+final As(
+    Select 
     c.stu_id,
-    c.id_form,
+    c.ID_form,
+    c.id_form_name,
     a.submit_date,
     a.pass_date,
     a.count_action
@@ -95,3 +105,50 @@ from cross_join c
 LEFT JOIN agg a
     ON a.stu_id = c.stu_id
     And a.id_form = c.id_form
+
+),
+
+joined_with_student AS(
+    SELECT
+        ds.stu_id,
+        ds.cur_id,
+        ds.cur_rn,
+        ds.study_type,
+        ds.stu_prg_plan,
+
+        f.ID_form,
+        f.id_form_name,
+        f.submit_date,
+        f.pass_date,
+        f.count_action
+
+    from final f
+    Left JOIN {{ref('dim_student')}} ds
+        on  f.stu_id = ds.stu_id
+),
+
+fact_sum_mile AS(
+    SELECT
+        jws.stu_id,
+        dc.curriculum_key,
+        jws.ID_form,
+        jws.id_form_name,
+        dd.date_key As submit_date,
+        dd2.date_key AS pass_date,
+        jws.count_action
+
+    from joined_with_student jws
+    Left JOIN {{ref('dim_curriculum')}} dc
+        ON jws.cur_id = dc.cur_id
+        AND jws.cur_rn = dc.cur_rn
+        AND jws.stu_prg_plan = dc.study_plan
+        AND jws.study_type = dc.study_type
+
+    LEFT JOIN {{ref('dim_date')}} dd    
+        ON jws.submit_date = dd.date_key
+
+    LEFT JOIN {{ref('dim_date')}} dd2
+        ON jws.pass_date = dd2.date_key
+)
+
+SELECT * from fact_sum_mile WHERE stu_id is NOT NULL;

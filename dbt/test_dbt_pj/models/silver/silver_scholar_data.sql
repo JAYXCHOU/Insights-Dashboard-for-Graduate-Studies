@@ -59,8 +59,7 @@ fix_date AS (
 ),
 
 final_data AS (
-    SELECT DISTINCT   -- 🔥 กัน duplicate
-
+    SELECT DISTINCT  
         stu_ID,
         Sch_ID,
         Scholar_thai,
@@ -86,6 +85,25 @@ final_data AS (
 
     FROM fix_date
 )
+SELECT
+    f.stu_ID,
+    f.Sch_ID,
+    f.Scholar_thai,
+    f.Scholar_eng ,
+    f.Rec_Syear,
+    f.F_Term,
+    f.Rec_Eyear,
+    f.L_Term,
+    f.GetDate,
+    f.FinalDate,
+    f.Amount
+    -- f.stu_adm_year
 
-SELECT *
-FROM final_data;
+FROM
+final_data f
+
+Left join silver_student_data sd
+ON  f.stu_id = sd.stu_id
+
+WHERE CAST(sd.stu_adm_year AS INT) >= 2558;
+

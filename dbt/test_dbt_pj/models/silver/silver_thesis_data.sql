@@ -1,10 +1,10 @@
 SELECT
-    stu_id,
-    ID_form,
-    form_name_th,
-    form_name_en,
-    step_id,
-    step,
+    t.stu_id,
+    t.ID_form,
+    t.form_name_th,
+    t.form_name_en,
+    t.step_id,
+    t.step,
 
     -- TRY_CONVERT(DATE, add_date, 111) AS add_date,
     -- CAST(
@@ -14,7 +14,7 @@ SELECT
     CAST(
         CONVERT(VARCHAR(8), 
             DATEADD(YEAR, 543, 
-                TRY_CONVERT(DATE, add_date, 111)
+                TRY_CONVERT(DATE, t.add_date, 111)
             )
         ,112)
     AS INT) AS add_date_key,
@@ -27,16 +27,20 @@ SELECT
      CAST(
         CONVERT(VARCHAR(8), 
             DATEADD(YEAR, 543, 
-                TRY_CONVERT(DATE, submit_date, 111)
+                TRY_CONVERT(DATE, t.submit_date, 111)
             )
         ,112)
     AS INT) AS submit_date_key,
 
-    PD_DateNo,
-    pd_DatePass ,
-    pt_dateno,
-    pub_DateNo,
-    pub_DatePass
+    t.PD_DateNo,
+    t.pd_DatePass ,
+    t.pt_dateno,
+    t.pub_DateNo,
+    t.pub_DatePass
 FROM
-bronze.thesis
-WHERE CAST(stu_id AS INT) >= 5800000;
+bronze.thesis t
+
+Left join silver_student_data sd
+ON  t.stu_id = sd.stu_id
+
+WHERE CAST(sd.stu_adm_year AS INT) >= 2558;

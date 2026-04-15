@@ -60,9 +60,10 @@ be_fixed AS (
             ELSE date_pass_th_num_fixed
         END AS pass_date_be
     FROM Clean_data
-)
+),
 
-SELECT
+final AS (
+    SELECT
     stu_id,
     event_type AS ID_form,
 
@@ -78,4 +79,20 @@ SELECT
         ELSE NULL
     END AS pass_date
 
-FROM be_fixed
+    FROM be_fixed
+)
+
+SELECT 
+    f.stu_id,
+    f.ID_form,
+    f.start_date,
+    f.pass_date
+From final f
+LEFT JOIN silver_student_data sd
+ON  f.stu_id = sd.stu_id
+
+WHERE CAST(sd.stu_adm_year AS INT) >= 2558
+
+
+
+

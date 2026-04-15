@@ -1,4 +1,5 @@
-SELECT
+WITH cleaned_curr As(
+  SELECT
   c.cur_id,
   c.cur_rn,
   c.study_type,
@@ -49,3 +50,8 @@ CROSS APPLY(
       (c.cur_pla_2_2, '2.2')
 ) v(flag, study_plan)
 WHERE v.flag = 'T'
+)
+
+SELECT * FROM
+cleaned_curr
+

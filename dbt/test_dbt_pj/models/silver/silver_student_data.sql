@@ -59,4 +59,4 @@ SELECT
     thesis_name_th
 FROM
 bronze.student_data
-WHERE CAST(stu_id AS INT) >= 5800000;
+WHERE CAST(stu_adm_year AS INT) >= 2558;

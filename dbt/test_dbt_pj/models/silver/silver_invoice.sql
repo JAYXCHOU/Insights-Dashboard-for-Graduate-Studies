@@ -1,17 +1,20 @@
 SELECT
-    inv_id,
-    reg_year,
-    reg_term,
-    inv_date,
+    i.inv_id,
+    i.reg_year,
+    i.reg_term,
+    i.inv_date,
     --Replace(inv_date,'/','') AS inv_date_key, 
     --Replace(inv_pay_Date,'/','') AS inv_pay_date_key
-    inv_pay_Date,
+    i.inv_pay_Date,
     -- inv_pay_status: ' ' (space) → NULL
-    NULLIF(LTRIM(RTRIM(inv_pay_status)), '')   AS inv_pay_status,
-    inv_total,
-    stu_id,
-    inv_by,
-    inv_pay_timeG
+    NULLIF(LTRIM(RTRIM(i.inv_pay_status)), '')   AS inv_pay_status,
+    i.inv_total,
+    i.stu_id,
+    i.inv_by,
+    i.inv_pay_timeG
 
-FROM bronze.invoice
-WHERE TRY_CAST(stu_id AS INT) >= 5800000
+FROM bronze.invoice i
+Left join silver_student_data sd
+ON  i.stu_id = sd.stu_id
+
+WHERE CAST(sd.stu_adm_year AS INT) >= 2558
