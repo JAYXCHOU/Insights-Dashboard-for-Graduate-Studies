@@ -1,9 +1,9 @@
 SELECT * FROM
 (
     VALUES
-    ('pd39','2','GR.39','สอบโครงร่าง', 'GR.39','staff'),
-    ('pt1','3','GR.1','อนุมัติหัวข้อ','GR.1', 'staff'),
-    ('pub2','4','GR.2','สอบวิทยานิพนธ์','GR.2','staff'),
+    -- ('pd39','2','GR.39','สอบโครงร่าง', 'GR.39','staff'),
+    -- ('pt1','3','GR.1','อนุมัติหัวข้อ','GR.1', 'staff'),
+    -- ('pub2','4','GR.2','สอบวิทยานิพนธ์','GR.2','staff'),
     ('sub','10','e-thesis_sub','ส่งวิทยานิพนธ์','thesis submission','student'),
     ('aprv','10','e-thesis_aprv','อนุมัติของหลักสูตรและจนท','thesis approve','staff'),
     ('1','1','GR.44','บฑ.44 การแต่งตั้งอาจารย์ที่ปรึกษาโครงร่างวิทยานิพนธ์/สารนิพนธ์', 'GR.44 Appointment of Thesis/Thematic Paper Proposal Advisor','student'),

@@ -51,7 +51,7 @@ join_milestone AS (
         dm.ID_form_name as ID_form_name,
        
         a.event_date,
-        a. event_type
+        a.event_type
 
     from all_events  a
     LEFT JOIN dim_milestone dm ON
@@ -65,11 +65,11 @@ agg As(
         ID_form_name,
         MIN(event_date) AS submit_date,
         max(event_date) AS pass_date,
-        Count(CASE WHEN event_date IS NOT NULL THEN 1 END) as count_action
+        -- Count(CASE WHEN event_date IS NOT NULL THEN 1 END) as count_action
+        COUNT(event_type) as count_action
     FROM join_milestone
     GROUP BY stu_id, ID_form, ID_form_name
 ),
-
 stu AS (
     SELECT DISTINCT 
     stu_id 
