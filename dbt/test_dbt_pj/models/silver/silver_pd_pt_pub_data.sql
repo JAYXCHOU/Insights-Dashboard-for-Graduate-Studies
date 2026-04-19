@@ -1,7 +1,39 @@
+-- WITH union_data AS(
+-- SELECT DISTINCT
+--     stu_id,
+--     'pd39' AS event_type,
+--     -- PD_DateNo AS date_no, 
+--     -- pd_DatePass  AS date_pass
+--     Replace(PD_DateNo,'/','') AS date_no, 
+--     Replace(pd_DatePass,'/','') AS date_pass
+-- From  bronze.thesis
+
+-- UNION ALL
+
+-- SELECT DISTINCT
+--   stu_id,
+--   'pt1' AS event_type,
+--   NULL AS  date_no,
+-- --   pt_dateno AS date_pass
+--   Replace(pt_dateno,'/','') AS date_pass
+-- From  bronze.thesis
+
+-- UNION ALL
+
+-- SELECT DISTINCT
+--   stu_id,
+--   'pub2' AS event_type,
+-- --    pub_DateNo AS date_no,
+-- --    pub_DatePass AS date_pass
+--   Replace(pub_DateNo,'/','')  AS date_no,
+--   Replace(pub_DatePass,'/','') AS date_pass
+-- From  bronze.thesis
+-- ),
+
 WITH union_data AS(
 SELECT DISTINCT
     stu_id,
-    'pd39' AS event_type,
+    '2' AS event_type,
     -- PD_DateNo AS date_no, 
     -- pd_DatePass  AS date_pass
     Replace(PD_DateNo,'/','') AS date_no, 
@@ -12,7 +44,7 @@ UNION ALL
 
 SELECT DISTINCT
   stu_id,
-  'pt1' AS event_type,
+  '3' AS event_type,
   NULL AS  date_no,
 --   pt_dateno AS date_pass
   Replace(pt_dateno,'/','') AS date_pass
@@ -22,13 +54,14 @@ UNION ALL
 
 SELECT DISTINCT
   stu_id,
-  'pub2' AS event_type,
+  '4' AS event_type,
 --    pub_DateNo AS date_no,
 --    pub_DatePass AS date_pass
   Replace(pub_DateNo,'/','')  AS date_no,
   Replace(pub_DatePass,'/','') AS date_pass
 From  bronze.thesis
 ),
+
 
 Clean_data AS(
     SELECT 
@@ -86,26 +119,6 @@ cleaned_date AS (
 
     FROM be_fixed
 )
-
--- final AS (
---     SELECT
---     stu_id,
---     event_type AS ID_form,
-
---     CASE
---         WHEN LEN(start_date_be) = 8
---         THEN start_date_be
---         ELSE NULL
---     END AS start_date,
-
---     CASE
---         WHEN LEN(pass_date_be) = 8
---         THEN pass_date_be
---         ELSE NULL
---     END AS pass_date
-
---     FROM be_fixed
--- )
 
 SELECT 
     f.stu_id,
