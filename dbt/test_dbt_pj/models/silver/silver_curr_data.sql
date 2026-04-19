@@ -50,8 +50,50 @@ CROSS APPLY(
       (c.cur_pla_2_2, '2.2')
 ) v(flag, study_plan)
 WHERE v.flag = 'T'
-)
+),
 
-SELECT * FROM
-cleaned_curr
+clean_cur_type AS(
+  SELECT
+    c.cur_id,
+    c.cur_rn,
+    c.study_type,
+    c.deg_lev_id,
+    c.cur_name_th,
+    c.cur_name_en,
+    c.deg_level,
+    c.fac_id,
+    c.fac_name_th,
+    c.fac_name_en,
+    c.cur_pla_a1,
+    c.cur_pla_a2,
+    c.cur_pla_b,
+    c.cur_pla_1_1,
+    c.cur_pla_1_2,
+    c.cur_pla_2_1,
+    c.cur_pla_2_2,
+    c.study_plan,
+    c.cur_type_th,
+    c.cur_type_i,
+    v.cur_type_lang,
+    c.web,
+    c.deg_name_th,
+    c.deg_name_en,
+    c.Brn_ID,
+    c.Sub_Brn_ID,
+    c.major_name_th,
+    c.major_name_en,
+    c.groupN_id,
+    c.study_group_type,
+    c.lang
+  FROM cleaned_curr c
+  CROSS APPLY(
+   VALUES
+      (c.cur_type_th, 'หลักสูตรไทย'),
+      (c.cur_type_i, 'หลักสูตรนานาชาติ')
+) v(flag, cur_type_lang)
+WHERE v.flag = 'T'
+)
+SELECT * From clean_cur_type
+
+
 
