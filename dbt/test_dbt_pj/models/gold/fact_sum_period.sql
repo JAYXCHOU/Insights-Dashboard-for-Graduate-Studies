@@ -172,6 +172,40 @@ union_all_phase AS(
 --     UNION ALL
 --     SELECT * from phase_4_2
 -- ), 
+stu AS(
+    SELECT DISTINCT
+    stu_id
+    FROM
+    union_all_phase
+),
+
+phase AS(
+    SELECT DISTINCT
+    period_id, period_id_name, period_name
+    FROM dim_period
+),
+cross_join AS(
+    SELECT
+        s.stu_id,
+        p.period_id,
+        p.period_name
+    From stu s
+    CROSS JOIN phase p 
+),
+
+agg AS(
+    Select 
+        c.stu_id,
+        c.period_id,
+        c.period_name,
+        u.start_date,
+        u.end_date
+    FROM cross_join c
+    LEFT JOIN union_all_phase u
+        ON c.stu_id = u.stu_id
+        AND c.period_id = u.phase
+
+),
 
 join_dim_period As(
     SELECT 
@@ -180,9 +214,9 @@ join_dim_period As(
         p.period_name,
         u.start_date,
         u.end_date
-    FROM union_all_phase u
+    FROM agg u
     LEFT JOIN dim_period p ON
-        u.phase = p.period_id
+        u.period_id = p.period_id
 ),
 
 join_dim_student AS (
