@@ -67,6 +67,7 @@ WITH curr_base AS (
         sd.groupN_id,
         sd.study_group_type,
         sd.lang,
+        sd.cur_type_lang,
         sc.mm,
         sc.max_term
     FROM silver_curr_data sd
