@@ -58,18 +58,65 @@ join_milestone AS (
         a.ID_form = dm.ID_form
 ),
 
-agg As(
+add_rn AS (
+    SELECT 
+        stu_id,
+        ID_form,
+        ID_form_name,
+        event_date,
+        event_type,
+
+        ROW_NUMBER() OVER (
+            PARTITION BY stu_id, ID_form
+            ORDER BY event_date
+        ) AS rn
+    FROM join_milestone
+),
+
+Id_form_2_3_4 AS (
     SELECT
         stu_id,
         ID_form,
         ID_form_name,
         MIN(event_date) AS submit_date,
-        max(event_date) AS pass_date,
-        -- Count(CASE WHEN event_date IS NOT NULL THEN 1 END) as count_action
-        COUNT(event_type) as count_action
-    FROM join_milestone
+        MAX(event_date) AS pass_date,
+        COUNT(DISTINCT CASE
+                WHEN event_date IS NOT NULL THEN CEILING(rn / 2.0) END) AS count_action
+    FROM add_rn
+    WHERE ID_form IN ('2','3','4')
     GROUP BY stu_id, ID_form, ID_form_name
 ),
+
+normal AS (
+    SELECT
+        stu_id,
+        ID_form,
+        ID_form_name,
+        MIN(event_date) AS submit_date,
+        MAX(event_date) AS pass_date,
+        Count(CASE WHEN event_date IS NOT NULL THEN 1 END) AS count_action
+    FROM join_milestone
+    WHERE ID_form NOT IN ('2','3','4')
+    GROUP BY stu_id, ID_form, ID_form_name
+),
+agg AS (
+    SELECT * FROM Id_form_2_3_4
+    UNION ALL
+    SELECT * FROM normal
+),
+-- agg As(
+--     SELECT
+--         stu_id,
+--         ID_form,
+--         ID_form_name,
+--         MIN(event_date) AS submit_date,
+--         max(event_date) AS pass_date,
+--         -- Count(CASE WHEN event_date IS NOT NULL THEN 1 END) as count_action
+--         COUNT(event_type) as count_action
+--     FROM join_milestone
+--     GROUP BY stu_id, ID_form, ID_form_name
+-- ),
+
 stu AS (
     SELECT DISTINCT 
     stu_id 
