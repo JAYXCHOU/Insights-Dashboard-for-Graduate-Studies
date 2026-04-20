@@ -22,7 +22,7 @@ With Cleaned_date AS(
     END AS stu_comp_date,
 
     CASE WHEN stu_comp_date IS NULL OR LTRIM(RTRIM(stu_comp_date)) = '' THEN NULL
-    ELSE TRY_CAST(stu_comp_year as INT) - 534 
+    ELSE TRY_CAST(stu_comp_year as INT) - 543
     END as stu_comp_year,
 
     stu_comp_term,
