@@ -104,10 +104,10 @@ study_plan AS(
     cur_nth,
     stu_app_plan,
     stu_prg_plan,
-    CASE 
-        WHEN stu_prg_plan Is NULL THEN NULL
-        ELSE LEFT(Trim(stu_prg_plan),1)
-    End as stu_plan,
+    -- CASE 
+    --     WHEN stu_prg_plan Is NULL THEN NULL
+    --     ELSE LEFT(Trim(stu_prg_plan),1)
+    -- End as stu_plan,
     pattern_detail,
     Brn_ID,
     brn_deg_nth,

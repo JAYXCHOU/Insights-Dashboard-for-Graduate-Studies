@@ -71,7 +71,7 @@ clean_cur_type AS(
     c.cur_pla_1_2,
     c.cur_pla_2_1,
     c.cur_pla_2_2,
-    c.study_plan AS org_study_plan,
+    c.study_plan,
     c.cur_type_th,
     c.cur_type_i,
     v.cur_type_lang,
@@ -112,11 +112,11 @@ study_plan AS(
     cur_pla_1_2,
     cur_pla_2_1,
     cur_pla_2_2,
-    org_study_plan,
-    CASE 
-      WHEN org_study_plan Is NULL THEN NULL
-      ELSE Left(TRIM(org_study_plan),1) 
-    End AS study_plan,
+    study_plan,
+    -- CASE 
+    --   WHEN org_study_plan Is NULL THEN NULL
+    --   ELSE Left(TRIM(org_study_plan),1) 
+    -- End AS study_plan,
     cur_type_th,
     cur_type_i,
     cur_type_lang,
