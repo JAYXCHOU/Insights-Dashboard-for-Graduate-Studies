@@ -161,7 +161,7 @@ joined_with_student AS(
         ds.cur_id,
         ds.cur_rn,
         ds.study_type,
-        ds.stu_prg_plan,
+        ds.stu_plan,
 
         f.ID_form,
         f.id_form_name,
@@ -188,7 +188,7 @@ fact_sum_mile AS(
     Left JOIN {{ref('dim_curriculum')}} dc
         ON jws.cur_id = dc.cur_id
         AND jws.cur_rn = dc.cur_rn
-        AND jws.stu_prg_plan = dc.study_plan
+        AND jws.stu_plan = dc.study_plan
         AND jws.study_type = dc.study_type
 
     LEFT JOIN {{ref('dim_date')}} dd    

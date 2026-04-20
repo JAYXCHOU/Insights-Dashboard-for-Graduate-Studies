@@ -71,7 +71,7 @@ clean_cur_type AS(
     c.cur_pla_1_2,
     c.cur_pla_2_1,
     c.cur_pla_2_2,
-    c.study_plan,
+    c.study_plan AS org_study_plan,
     c.cur_type_th,
     c.cur_type_i,
     v.cur_type_lang,
@@ -92,8 +92,47 @@ clean_cur_type AS(
       (c.cur_type_i, 'หลักสูตรนานาชาติ')
 ) v(flag, cur_type_lang)
 WHERE v.flag = 'T'
+),
+study_plan AS(
+  SELECT 
+    cur_id,
+    cur_rn,
+    study_type,
+    deg_lev_id,
+    cur_name_th,
+    cur_name_en,
+    deg_level,
+    fac_id,
+    fac_name_th,
+    fac_name_en,
+    cur_pla_a1,
+    cur_pla_a2,
+    cur_pla_b,
+    cur_pla_1_1,
+    cur_pla_1_2,
+    cur_pla_2_1,
+    cur_pla_2_2,
+    org_study_plan,
+    CASE 
+      WHEN org_study_plan Is NULL THEN NULL
+      ELSE Left(TRIM(org_study_plan),1) 
+    End AS study_plan,
+    cur_type_th,
+    cur_type_i,
+    cur_type_lang,
+    web,
+    deg_name_th,
+    deg_name_en,
+    Brn_ID,
+    Sub_Brn_ID,
+    major_name_th,
+    major_name_en,
+    groupN_id,
+    study_group_type,
+    lang
+  From clean_cur_type
 )
-SELECT * From clean_cur_type
+Select * From study_plan
 
 
 

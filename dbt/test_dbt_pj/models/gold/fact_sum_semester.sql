@@ -98,7 +98,7 @@ join_dim_student AS(
     s.cur_id,
     s.cur_rn,
     s.study_type,
-    s.stu_prg_plan,
+    s.stu_plan,
     y.Reg_Year,
     y.Reg_Term,
     f.count_reg_subj,
@@ -131,7 +131,7 @@ from join_dim_student s
 LEFT JOIN {{ref('dim_curriculum')}} dc
     ON s.cur_id = dc.cur_id
     AND s.cur_rn = dc.cur_rn
-    AND s.stu_prg_plan = dc.study_plan
+    AND s.stu_plan = dc.study_plan
     AND s.study_type = dc.study_type
 
 -- student_semester AS (
