@@ -55,6 +55,7 @@ WITH curr_base AS (
     SELECT DISTINCT
         sd.cur_id,
         sd.cur_rn,
+        sd.org_study_plan,
         sd.study_plan,
         sd.study_type,
         sd.cur_name_th,
@@ -74,12 +75,29 @@ WITH curr_base AS (
     LEFT JOIN {{ref('silver_curr_cyc_data')}} sc
         ON sd.cur_id = sc.cur_id
         AND sd.cur_rn = sc.cur_rn
-        AND sd.study_plan = sc.[plan]
+        AND sd.study_plan = sc.study_plan
         AND sd.study_type = sc.study_type
 )
 
 SELECT
     ROW_NUMBER() OVER (ORDER BY cur_id, cur_rn, study_plan) AS curriculum_key,
     CONCAT(cur_id, '_', cur_rn, '_', study_plan, '_', study_type) AS curriculum_id,
-    *
+    cur_id,
+    cur_rn,
+    org_study_plan,
+    study_plan,
+    study_type,
+    cur_name_th,
+    cur_name_en,
+    deg_lev_id,
+    deg_level,
+    fac_id,
+    fac_name_th,
+    fac_name_en,
+    groupN_id,
+    study_group_type,
+    lang,
+    cur_type_lang,
+    mm,
+    max_term
 FROM curr_base
