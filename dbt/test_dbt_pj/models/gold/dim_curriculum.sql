@@ -55,7 +55,6 @@ WITH curr_base AS (
     SELECT DISTINCT
         sd.cur_id,
         sd.cur_rn,
-        sd.org_study_plan,
         sd.study_plan,
         sd.study_type,
         sd.cur_name_th,
@@ -75,7 +74,7 @@ WITH curr_base AS (
     LEFT JOIN {{ref('silver_curr_cyc_data')}} sc
         ON sd.cur_id = sc.cur_id
         AND sd.cur_rn = sc.cur_rn
-        AND sd.study_plan = sc.study_plan
+        AND sd.study_plan = sc.[plan]
         AND sd.study_type = sc.study_type
 )
 
@@ -84,7 +83,6 @@ SELECT
     CONCAT(cur_id, '_', cur_rn, '_', study_plan, '_', study_type) AS curriculum_id,
     cur_id,
     cur_rn,
-    org_study_plan,
     study_plan,
     study_type,
     cur_name_th,

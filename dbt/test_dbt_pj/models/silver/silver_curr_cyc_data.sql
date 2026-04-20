@@ -16,10 +16,10 @@ Select
     cur_rn,
     study_type,
     [plan],
-    CASE 
-      WHEN [plan] Is NULL THEN NULL
-      ELSE Left(TRIM([plan]),1) 
-    End AS study_plan,
+    -- CASE 
+    --   WHEN [plan] Is NULL THEN NULL
+    --   ELSE Left(TRIM([plan]),1) 
+    -- End AS study_plan,
     mm,
     max_term
     
