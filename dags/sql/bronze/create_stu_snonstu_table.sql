@@ -10,7 +10,8 @@ BEGIN
         snon_year char(4),
         snon_memo nvarchar(255),
         nstu_id char(2),
-        sta_outdate char(10)
+        sta_outdate char(10),
+        loaded_at              DATETIME           DEFAULT GETDATE()
     );
 
     PRINT 'Created bronze.stu_snonstu';

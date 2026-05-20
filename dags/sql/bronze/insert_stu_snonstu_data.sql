@@ -1,11 +1,17 @@
 
+-- Backfill: อัปเดตแถวเก่าที่ยังไม่มี loaded_at (safe to leave ไว้ตลอด)
+UPDATE bronze.stu_snonstu
+SET loaded_at = '2000-01-01 00:00:00'
+WHERE loaded_at IS NULL;
+
 INSERT INTO bronze.stu_snonstu(
     stu_id,
     snon_term,
     snon_year,
     snon_memo,
     nstu_id,
-    sta_outdate
+    sta_outdate,
+    loaded_at
 )
 SELECT
     stu_ID,
@@ -13,7 +19,8 @@ SELECT
     SNon_Year,
     SNon_Memo,
     RIGHT('00' + CAST(NStu_ID AS varchar), 2),
-    Sta_OutDate
+    Sta_OutDate,
+    GETDATE()
 FROM dbo.ICT_Stu_SNonStu s
 
 WHERE NOT EXISTS (

@@ -7,7 +7,8 @@ BEGIN
     CREATE TABLE bronze.sta_nonstu(
         nstu_id char(2),
         nstu_des_thai nvarchar(255),
-        nstu_des_eng nvarchar(255)
+        nstu_des_eng nvarchar(255),
+        loaded_at              DATETIME           DEFAULT GETDATE()
     );
 
     PRINT 'Created bronze.sta_nonstu';

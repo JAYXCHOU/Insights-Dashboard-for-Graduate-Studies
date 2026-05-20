@@ -30,15 +30,24 @@
 -- From  bronze.thesis
 -- ),
 
-WITH union_data AS(
+-- Dedup: Bronze เป็น Append-only → เลือกเฉพาะ snapshot ล่าสุดของแต่ละ stu_id + ID_form
+WITH latest_bronze AS (
+    SELECT *,
+        ROW_NUMBER() OVER (PARTITION BY stu_id, ID_form ORDER BY loaded_at DESC) AS _rn
+    FROM bronze.thesis
+),
+
+thesis_latest AS (
+    SELECT * FROM latest_bronze WHERE _rn = 1
+),
+
+union_data AS(
 SELECT DISTINCT
     stu_id,
     '2' AS event_type,
-    -- PD_DateNo AS date_no, 
-    -- pd_DatePass  AS date_pass
-    Replace(PD_DateNo,'/','') AS date_no, 
+    Replace(PD_DateNo,'/','') AS date_no,
     Replace(pd_DatePass,'/','') AS date_pass
-From  bronze.thesis
+From  thesis_latest
 
 UNION ALL
 
@@ -46,20 +55,17 @@ SELECT DISTINCT
   stu_id,
   '3' AS event_type,
   NULL AS  date_no,
---   pt_dateno AS date_pass
   Replace(pt_dateno,'/','') AS date_pass
-From  bronze.thesis
+From  thesis_latest
 
 UNION ALL
 
 SELECT DISTINCT
   stu_id,
   '4' AS event_type,
---    pub_DateNo AS date_no,
---    pub_DatePass AS date_pass
   Replace(pub_DateNo,'/','')  AS date_no,
   Replace(pub_DatePass,'/','') AS date_pass
-From  bronze.thesis
+From  thesis_latest
 ),
 
 

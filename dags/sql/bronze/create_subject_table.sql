@@ -15,7 +15,8 @@ BEGIN
         cur_id                         nvarchar(10),
         cur_rn                         char(2),
         study_type                     char(1),
-        tsubj_nen                      nvarchar(100)
+        tsubj_nen                      nvarchar(100),
+        loaded_at              DATETIME           DEFAULT GETDATE()
     );
     PRINT 'Created bronze subject table';
 END

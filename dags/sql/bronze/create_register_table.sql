@@ -12,7 +12,8 @@ BEGIN
         Reg_Credit                     float,
         subj_nen                       nvarchar(255),
         subj_nth                       nvarchar(255),
-        subj_id_th                     nvarchar(20)
+        subj_id_th                     nvarchar(20),
+        loaded_at              DATETIME           DEFAULT GETDATE()
     );
     PRINT 'Created bronze register table';
 END

@@ -10,7 +10,8 @@ BEGIN
         Subj_ID                        nvarchar(20),
         Subj_Rn                        char(2),
         Credit                         float,
-        Reg_Grad                       nvarchar(10)
+        Reg_Grad                       nvarchar(10),
+        loaded_at              DATETIME           DEFAULT GETDATE()
     );
     PRINT 'Created bronze grade_stu table';
 END

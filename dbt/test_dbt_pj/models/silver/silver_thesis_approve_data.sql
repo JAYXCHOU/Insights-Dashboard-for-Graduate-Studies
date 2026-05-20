@@ -1,3 +1,14 @@
+-- Dedup: Bronze เป็น Append-only → เลือกเฉพาะ snapshot ล่าสุดของแต่ละ stu_id + rn
+WITH latest_bronze AS (
+    SELECT *,
+        ROW_NUMBER() OVER (PARTITION BY stu_id, rn ORDER BY loaded_at DESC) AS _rn
+    FROM bronze.thesis_approve
+),
+
+latest_approve AS (
+    SELECT * FROM latest_bronze WHERE _rn = 1
+)
+
 SELECT
     a.stu_id
     ,a.rn
@@ -27,7 +38,7 @@ SELECT
 
     CONVERT(VARCHAR(10), CAST(a.apv_time AS DATETIME), 111) AS add_date
 
-FROM bronze.thesis_approve a
+FROM latest_approve a
 
 Left join silver_student_data sd
 ON  a.stu_id = sd.stu_id

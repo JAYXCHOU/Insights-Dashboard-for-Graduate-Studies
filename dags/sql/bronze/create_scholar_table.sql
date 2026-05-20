@@ -14,7 +14,8 @@ BEGIN
         L_Term                         char(1),
         GetDate                        char(10),
         FinalDate                      char(10),
-        Amount                         float
+        Amount                         float,
+        loaded_at              DATETIME           DEFAULT GETDATE()
     );
     PRINT 'Created bronze scholar table';
 END        

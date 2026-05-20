@@ -1,3 +1,8 @@
+-- Backfill: อัปเดตแถวเก่าที่ยังไม่มี loaded_at (safe to leave ไว้ตลอด)
+UPDATE bronze.scholar
+SET loaded_at = '2000-01-01 00:00:00'
+WHERE loaded_at IS NULL;
+
 INSERT INTO bronze.scholar(
     stu_ID      ,
     Sch_ID      ,
@@ -9,7 +14,8 @@ INSERT INTO bronze.scholar(
     L_Term      ,
     GetDate     ,
     FinalDate   ,
-    Amount
+    Amount,
+    loaded_at
 )
 SELECT
     stu_ID      ,
@@ -22,7 +28,8 @@ SELECT
     L_Term      ,
     GetDate     ,
     FinalDate   ,
-    Amount
+    Amount,
+    GETDATE()
 FROM
 dbo.ICT_Scholar_Data sd
 

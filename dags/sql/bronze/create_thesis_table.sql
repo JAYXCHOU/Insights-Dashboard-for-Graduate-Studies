@@ -17,6 +17,7 @@ BEGIN
         pt_dateno                      char(10),
         pub_DateNo                     char(10),
         pub_DatePass                   char(10),
+        loaded_at              DATETIME           DEFAULT GETDATE()
     );
     PRINT 'Created bronze thesis table';
 END        

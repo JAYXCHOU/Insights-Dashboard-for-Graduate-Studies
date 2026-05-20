@@ -13,6 +13,7 @@ BEGIN
         QA_desc                        nvarchar(200),
         QA_text                        nvarchar(MAX),
         apv_time                       varchar(20),
+        loaded_at              DATETIME           DEFAULT GETDATE()
     );
     PRINT 'Created bronze thesis_approve table';
 END        

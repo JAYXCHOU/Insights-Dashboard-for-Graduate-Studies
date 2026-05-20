@@ -1,3 +1,8 @@
+-- Backfill: อัปเดตแถวเก่าที่ยังไม่มี loaded_at (safe to leave ไว้ตลอด)
+UPDATE bronze.curriculum
+SET loaded_at = '2000-01-01 00:00:00'
+WHERE loaded_at IS NULL;
+
 INSERT INTO bronze.curriculum(
    cur_id,
    cur_rn,
@@ -34,7 +39,8 @@ INSERT INTO bronze.curriculum(
    [อาชีพที่สามารถประกอบได้หลังสำเร็จการศึกษา (en) ] ,
    groupN_id ,
    [กลุ่มการศึกษาแบ่งตามมหาวิทยาลัย (3 กลุ่ม) ],
-   [ภาษาที่ใช้ทำวิทยานิพนธ์ (T/E) ] 
+   [ภาษาที่ใช้ทำวิทยานิพนธ์ (T/E) ],
+   loaded_at
 )
 SELECT
     sc.cur_id,
@@ -72,7 +78,8 @@ SELECT
     sc.[อาชีพที่สามารถประกอบได้หลังสำเร็จการศึกษา (en) ] ,
     sc.groupN_id ,
     sc.[กลุ่มการศึกษาแบ่งตามมหาวิทยาลัย (3 กลุ่ม) ]  AS study_group_type,
-    sc.[ภาษาที่ใช้ทำวิทยานิพนธ์ (T/E) ] 
+    sc.[ภาษาที่ใช้ทำวิทยานิพนธ์ (T/E) ],
+    GETDATE()
 FROM
 dbo.ICT_curriculum sc
 WHERE  NOT EXISTS (

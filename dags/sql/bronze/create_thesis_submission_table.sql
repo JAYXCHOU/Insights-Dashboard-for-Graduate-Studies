@@ -6,6 +6,7 @@ BEGIN
     CREATE TABLE bronze.thesis_submission(
         sub_stu                        char(7),
         save_time                      varchar(20),
+        loaded_at              DATETIME           DEFAULT GETDATE()
     );
     PRINT 'Created bronze thesis_submission table';
 END        

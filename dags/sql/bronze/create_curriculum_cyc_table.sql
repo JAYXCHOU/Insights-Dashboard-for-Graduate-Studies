@@ -10,6 +10,7 @@ BEGIN
         [plan]                         VARCHAR(5),
         mm                             float,
         max_term                       int,
+        loaded_at              DATETIME           DEFAULT GETDATE()
     );
     PRINT 'Created bronze curriculum_cyc table';
 END        

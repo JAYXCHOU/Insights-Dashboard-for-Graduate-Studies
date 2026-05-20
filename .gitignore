@@ -11,3 +11,11 @@ profiles/
 .env
 
 *.user.yml
+
+# Data files — ห้าม push ขึ้น GitHub (ข้อมูลนักศึกษาเป็นข้อมูลส่วนตัว)
+data/gold/*.csv
+data/gold/*.xlsx
+
+# ML outputs — ผลลัพธ์จากการรัน model
+data/gold/predictions_late_graduation.csv
+data/gold/feature_importance.csv

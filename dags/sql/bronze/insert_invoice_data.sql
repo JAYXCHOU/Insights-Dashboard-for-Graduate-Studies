@@ -1,33 +1,17 @@
-INSERT INTO bronze.invoice(
-    inv_id        ,
-    reg_year      ,
-    reg_term      ,
-    inv_date      ,
-    inv_pay_Date  ,
-    inv_pay_status,
-    inv_total     ,
-    stu_id        ,
-    inv_by        ,
-    inv_pay_timeG ,
-    GRID
-)
-SELECT
-    inv_id        ,
-    reg_year      ,
-    reg_term      ,
-    inv_date      ,
-    inv_pay_Date  ,
-    inv_pay_status,
-    inv_total     ,
-    stu_id        ,
-    inv_by        ,
-    inv_pay_timeG ,
-    GRID
-FROM
-dbo.ICT_invoice iv
+-- TRUNCATE + INSERT ใน Transaction: ล้างแล้ว reload ทั้งหมดทุกรอบ
+BEGIN TRANSACTION;
+    TRUNCATE TABLE bronze.invoice;
 
-WHERE NOT EXISTS(
-    SELECT 1
-    FROM bronze.invoice bi
-    WHERE iv.inv_id = bi.inv_id
-);
+    INSERT INTO bronze.invoice(
+        inv_id, reg_year, reg_term, inv_date, inv_pay_Date,
+        inv_pay_status, inv_total, stu_id, inv_by,
+        inv_pay_timeG, GRID,
+        loaded_at
+    )
+    SELECT
+        inv_id, reg_year, reg_term, inv_date, inv_pay_Date,
+        inv_pay_status, inv_total, stu_id, inv_by,
+        inv_pay_timeG, GRID,
+        GETDATE()
+    FROM dbo.ICT_invoice;
+COMMIT;

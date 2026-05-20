@@ -62,7 +62,8 @@ BEGIN
             payment_calculation_type_name_th    varchar(255),
             stu_birth                      char(10),
             thesis_name_en                 nvarchar(4000),
-            thesis_name_th                 nvarchar(4000)
+            thesis_name_th                 nvarchar(4000),
+            loaded_at              DATETIME           DEFAULT GETDATE()
         );
         PRINT 'Created bronze student_data table';
 END        

@@ -1,4 +1,11 @@
-With Cleaned_date AS(
+-- Dedup: Bronze เป็น Append-only → เลือกเฉพาะ snapshot ล่าสุดของแต่ละ stu_id
+WITH latest_bronze AS (
+    SELECT *,
+        ROW_NUMBER() OVER (PARTITION BY stu_id ORDER BY loaded_at DESC) AS _rn
+    FROM bronze.student_data
+),
+
+Cleaned_date AS(
     SELECT
     stu_id,
     stu_deg_lev,
@@ -74,8 +81,8 @@ With Cleaned_date AS(
     stu_birth,
     thesis_name_en,
     thesis_name_th
-FROM
-bronze.student_data
+FROM latest_bronze
+    WHERE _rn = 1
 ),
 
 study_plan AS(
@@ -148,5 +155,7 @@ study_plan AS(
 
 SELECT * FROM study_plan
 WHERE stu_adm_year >= 2015
+  AND deg_lev_id IN ('M', 'D')           -- เฉพาะปริญญาโท และปริญญาเอกเท่านั้น
+  AND (max_year IS NULL OR max_year <> 0) -- ตัด max_year = 0 ออก (dirty data) คง NULL ไว้สำหรับ BI
 
 

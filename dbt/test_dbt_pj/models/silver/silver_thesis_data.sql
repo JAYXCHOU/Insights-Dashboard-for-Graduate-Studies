@@ -1,3 +1,14 @@
+-- Dedup: Bronze เป็น Append-only → เลือกเฉพาะ snapshot ล่าสุดของแต่ละ stu_id + ID_form
+WITH latest_bronze AS (
+    SELECT *,
+        ROW_NUMBER() OVER (PARTITION BY stu_id, ID_form ORDER BY loaded_at DESC) AS _rn
+    FROM bronze.thesis
+),
+
+latest_thesis AS (
+    SELECT * FROM latest_bronze WHERE _rn = 1
+)
+
 SELECT
     t.stu_id,
     t.ID_form,
@@ -27,8 +38,7 @@ SELECT
     t.pt_dateno,
     t.pub_DateNo,
     t.pub_DatePass
-FROM
-bronze.thesis t
+FROM latest_thesis t
 
 Left join silver_student_data sd
 ON  t.stu_id = sd.stu_id

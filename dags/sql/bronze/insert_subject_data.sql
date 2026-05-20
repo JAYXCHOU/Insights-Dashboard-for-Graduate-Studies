@@ -1,3 +1,8 @@
+-- Backfill: อัปเดตแถวเก่าที่ยังไม่มี loaded_at (safe to leave ไว้ตลอด)
+UPDATE bronze.subject
+SET loaded_at = '2000-01-01 00:00:00'
+WHERE loaded_at IS NULL;
+
 INSERT INTO bronze.subject(
     subj_id   ,
     subj_rn   ,
@@ -10,7 +15,8 @@ INSERT INTO bronze.subject(
     cur_id    ,
     cur_rn    ,
     study_type,
-    tsubj_nen
+    tsubj_nen,
+    loaded_at
 )
 SELECT
     subj_id   ,
@@ -24,7 +30,8 @@ SELECT
     cur_id    ,
     cur_rn    ,
     study_type,
-    tsubj_nen
+    tsubj_nen,
+    GETDATE()
 FROM
 dbo.ICT_Subject sj
 

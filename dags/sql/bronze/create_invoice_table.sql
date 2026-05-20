@@ -14,7 +14,8 @@ BEGIN
         stu_id                         char(7),
         inv_by                         nvarchar(50),
         inv_pay_timeG                  nvarchar(50),
-        GRID                           char(1)
+        GRID                           char(1),
+        loaded_at              DATETIME           DEFAULT GETDATE()
     );
     PRINT 'Created bronze invoice table';
 END

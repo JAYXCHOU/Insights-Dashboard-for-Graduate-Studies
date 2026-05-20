@@ -40,6 +40,7 @@ BEGIN
         groupN_id                      char(2),
         [กลุ่มการศึกษาแบ่งตามมหาวิทยาลัย (3 กลุ่ม)]     varchar(150),
         [ภาษาที่ใช้ทำวิทยานิพนธ์ (T/E)]  varchar(1),
+        loaded_at              DATETIME           DEFAULT GETDATE()
     );
     PRINT 'Created bronze curriculum table';
 END        
